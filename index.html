@@ -1,0 +1,571 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Attachments by jchristopher</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Attachments</h1>
+        <p>[WordPress Plugin] Attachments allows you to simply append any number of items from your WordPress Media Library to Posts, Pages, and Custom Post Types</p>
+
+        <p class="view"><a href="https://github.com/jchristopher/attachments">View the Project on GitHub <small>jchristopher/attachments</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/jchristopher/attachments/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jchristopher/attachments/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jchristopher/attachments">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>This is a WordPress plugin. <a href="http://wordpress.org/extend/plugins/attachments/">Official download available on WordPress Extend</a>.</p>
+
+<h1>Attachments</h1>
+
+<p>Attachments allows you to simply append any number of items from your WordPress Media Library to Posts, Pages, and Custom Post Types</p>
+
+<ul>
+<li><a href="#description">Description</a></li>
+<li><a href="#installation">Installation</a></li>
+<li>
+<strong><a href="#upgrade-notice">Upgrade Notice</a></strong> <em>Pay specific attention if upgrading from a version before 3.0</em>
+</li>
+<li>
+<a href="#usage">Usage</a>
+
+<ul>
+<li><a href="#disable-settings-screen">Disable Settings Screen</a></li>
+<li>
+<a href="#setting-up-instances">Setting Up Instances</a>
+
+<ul>
+<li><a href="#disable-the-default-instance">Disable the Default Instance</a></li>
+<li><a href="#create-custom-instances">Create Custom Instances</a></li>
+<li><a href="#fields-reference">Fields Reference</a></li>
+</ul>
+</li>
+<li>
+<a href="#pulling-attachments-to-your-theme">Pulling Attachments to your Theme</a>
+
+<ul>
+<li><a href="#retrieve-attachments-outside-the-loop">Retrieve Attachments Outside The Loop</a></li>
+<li><a href="#retrieve-attachment-attributes">Retrieve Attachment Attributes</a></li>
+<li><a href="#retrieve-single-attachments">Retrieve Single Attachments</a></li>
+</ul>
+</li>
+<li><a href="#search">Search</a></li>
+</ul>
+</li>
+<li><a href="#screenshots">Screenshots</a></li>
+<li><a href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+<li><a href="#changelog">Changelog</a></li>
+<li><a href="#roadmap">Roadmap</a></li>
+</ul><h2>Description</h2>
+
+<p>Attachments allows you to simply append any number of items from your WordPress Media Library to Posts, Pages, and Custom Post Types. This plugin <em>does not</em> directly interact with your theme, you will need to edit your template files.</p>
+
+<h3>Updated for WordPress 3.5!</h3>
+
+<p>WordPress 3.5 ships with an amazing new Media workflow and Attachments 3.0 makes great use of it. <em>If you are not running WordPress 3.5, version 1.6.2.1 will be used until you upgrade to WordPress 3.5.</em></p>
+
+<h3>Associate Media items with posts</h3>
+
+<p>The idea behind Attachments is to give developers the ability to directly associate Media items with any post. This is accomplished by adding a meta box to post edit screens as determined by the developer. Once Media items have been associated with a post, you're able to retrieve those Attachments and include them directly within your template files using any specific markup you wish.</p>
+
+<h3>Integrate Attachments within your theme with fine grained control</h3>
+
+<p><strong>Attachments does not automatically integrate itself with your theme.</strong> Since the idea behind Attachments is to allow integration of Media within posts using developer-crafted, unique markup, <em>it's up to you to integrate with your theme</em>. The most basic integration includes editing the <a href="http://codex.wordpress.org/Template_Hierarchy">appropriate template file</a> and adding your call(s) to Attachments. For example, if you have set up Attachments to be used with your Posts entries, edit <code>single.php</code> to include the following within The Loop:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$attachments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Attachments</span><span class="p">(</span> <span class="s1">'attachments'</span> <span class="p">);</span> <span class="cm">/* pass the instance name */</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">exist</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;h3&gt;Attachments&lt;/h3&gt;</span>
+<span class="x">  &lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">while</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;li&gt;</span>
+<span class="x">        ID: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Type: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">type</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Subtype: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">subtype</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        URL: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">url</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Image: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">image</span><span class="p">(</span> <span class="s1">'thumbnail'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Source: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">src</span><span class="p">(</span> <span class="s1">'full'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Size: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">filesize</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Title Field: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'title'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Caption Field: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'caption'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endwhile</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;/ul&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+<p>That snippet will request all of the existing Attachments defined for the current Post within The Loop, and retrieve each itemized property for that Attachment. Using the provided details you're able to integrate the attached Media items in any way you please.</p>
+
+<h2>Installation</h2>
+
+<ol>
+<li>Download the plugin and extract the files</li>
+<li>Upload <code>attachments</code> to your <code>~/wp-content/plugins/</code> directory</li>
+<li>Activate the plugin through the 'Plugins' menu in WordPress</li>
+<li>Implement Attachments in your theme's <code>functions.php</code> or your own plugin (see <strong><a href="#usage">Usage</a></strong>)</li>
+<li>Update your templates where applicable (see <strong><a href="#usage">Usage</a></strong>)</li>
+</ol><h2>Upgrade Notice</h2>
+
+<h4>3.0</h4>
+
+<p><strong>You will need to update your theme files that use Attachments 3.0</strong>. Version 1.x of Attachments has been <em>fully deprecated</em> but is still available. If you would like to continue to use the (no longer supported) 1.x version you may add the following to your <code>wp-config.php</code>:</p>
+
+<div class="highlight"><pre><span class="nb">define</span><span class="p">(</span> <span class="s1">'ATTACHMENTS_LEGACY'</span><span class="p">,</span> <span class="k">true</span> <span class="p">);</span> <span class="c1">// force the legacy version of Attachments</span>
+</pre></div>
+
+<p>Version 3 is a <strong>major</strong> rewrite. While I've taken precautions in ensuring you won't lose any saved data it is important to back up your databse prior to upgrading in case something goes wrong. This version is a complete rewrite so all legacy data will be left in place, but a migration must take place to match the new data storage model and workflow.</p>
+
+<h2>Usage</h2>
+
+<h3>Disable Settings Screen</h3>
+
+<p>Attachments ships with a <code>Settings</code> screen (found under the <code>Settings</code> menu in the main WordPress admin navigation) that facilitates data migration from version 1.x and also offers some code snippets. If you would like to <strong>disable the Settings screen</strong> add the following to your theme's <code>functions.php</code>:</p>
+
+<div class="highlight"><pre><span class="nb">define</span><span class="p">(</span> <span class="s1">'ATTACHMENTS_SETTINGS_SCREEN'</span><span class="p">,</span> <span class="k">false</span> <span class="p">);</span> <span class="c1">// disable the Settings screen</span>
+</pre></div>
+
+<h3>Setting Up Instances</h3>
+
+<p>When Attachments is first activated, a default instance is created titled Attachments. It has two fields:</p>
+
+<ol>
+<li>Title</li>
+<li>Caption</li>
+</ol><h4>Disable the Default Instance</h4>
+
+<p>If you would like to <em>disable the default instance</em> (meta box titled 'Attachments' with a 'Title' and 'Caption' field) add the following to your <code>wp-config.php</code>:</p>
+
+<div class="highlight"><pre><span class="nb">define</span><span class="p">(</span> <span class="s1">'ATTACHMENTS_DEFAULT_INSTANCE'</span><span class="p">,</span> <span class="k">false</span> <span class="p">);</span>
+</pre></div>
+
+<h4>Create Custom Instances</h4>
+
+<p>You may create instances with your own custom fields by using the <code>attachments_register</code> action. To create your own instance add the following to your theme's <code>functions.php</code> or your own plugin:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+
+<span class="k">function</span> <span class="nf">my_attachments</span><span class="p">(</span> <span class="nv">$attachments</span> <span class="p">)</span>
+<span class="p">{</span>
+  <span class="nv">$fields</span>         <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="k">array</span><span class="p">(</span>
+      <span class="s1">'name'</span>      <span class="o">=&gt;</span> <span class="s1">'title'</span><span class="p">,</span>                         <span class="c1">// unique field name</span>
+      <span class="s1">'type'</span>      <span class="o">=&gt;</span> <span class="s1">'text'</span><span class="p">,</span>                          <span class="c1">// registered field type</span>
+      <span class="s1">'label'</span>     <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Title'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>    <span class="c1">// label to display</span>
+      <span class="s1">'default'</span>   <span class="o">=&gt;</span> <span class="s1">'title'</span><span class="p">,</span>                         <span class="c1">// default value upon selection</span>
+    <span class="p">),</span>
+    <span class="k">array</span><span class="p">(</span>
+      <span class="s1">'name'</span>      <span class="o">=&gt;</span> <span class="s1">'caption'</span><span class="p">,</span>                       <span class="c1">// unique field name</span>
+      <span class="s1">'type'</span>      <span class="o">=&gt;</span> <span class="s1">'textarea'</span><span class="p">,</span>                      <span class="c1">// registered field type</span>
+      <span class="s1">'label'</span>     <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Caption'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>  <span class="c1">// label to display</span>
+      <span class="s1">'default'</span>   <span class="o">=&gt;</span> <span class="s1">'caption'</span><span class="p">,</span>                       <span class="c1">// default value upon selection</span>
+    <span class="p">),</span>
+  <span class="p">);</span>
+
+  <span class="nv">$args</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+
+    <span class="c1">// title of the meta box (string)</span>
+    <span class="s1">'label'</span>         <span class="o">=&gt;</span> <span class="s1">'My Attachments'</span><span class="p">,</span>
+
+    <span class="c1">// all post types to utilize (string|array)</span>
+    <span class="s1">'post_type'</span>     <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="s1">'post'</span><span class="p">,</span> <span class="s1">'page'</span> <span class="p">),</span>
+
+    <span class="c1">// meta box position (string) (normal, side or advanced)</span>
+    <span class="s1">'position'</span>      <span class="o">=&gt;</span> <span class="s1">'normal'</span><span class="p">,</span>
+
+    <span class="c1">// meta box priority (string) (high, default, low, core)</span>
+    <span class="s1">'priority'</span>      <span class="o">=&gt;</span> <span class="s1">'high'</span><span class="p">,</span>
+
+    <span class="c1">// allowed file type(s) (array) (image|video|text|audio|application)</span>
+    <span class="s1">'filetype'</span>      <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span>  <span class="c1">// no filetype limit</span>
+
+    <span class="c1">// include a note within the meta box (string)</span>
+    <span class="s1">'note'</span>          <span class="o">=&gt;</span> <span class="s1">'Attach files here!'</span><span class="p">,</span>
+
+    <span class="c1">// text for 'Attach' button in meta box (string)</span>
+    <span class="s1">'button_text'</span>   <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Attach Files'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>
+
+    <span class="c1">// text for modal 'Attach' button (string)</span>
+    <span class="s1">'modal_text'</span>    <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Attach'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>
+
+    <span class="c1">// fields array</span>
+    <span class="s1">'fields'</span>        <span class="o">=&gt;</span> <span class="nv">$fields</span><span class="p">,</span>
+
+  <span class="p">);</span>
+
+  <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">register</span><span class="p">(</span> <span class="s1">'my_attachments'</span><span class="p">,</span> <span class="nv">$args</span> <span class="p">);</span> <span class="c1">// unique instance name</span>
+<span class="p">}</span>
+
+<span class="nx">add_action</span><span class="p">(</span> <span class="s1">'attachments_register'</span><span class="p">,</span> <span class="s1">'my_attachments'</span> <span class="p">);</span>
+</pre></div>
+
+<h4>Fields Reference</h4>
+
+<p>At this time there are <strong>four</strong> field types available:</p>
+
+<ol>
+<li><code>text</code></li>
+<li><code>textarea</code></li>
+<li><code>select</code></li>
+<li><code>wysiwyg</code></li>
+</ol><p>When declaring fields for your instance, you'll be composing an array of fields, each with an array of parameters that set the various attributes of each field. Here is a full example of all available parameters for all available fields:</p>
+
+<div class="highlight"><pre><span class="sd">/**</span>
+<span class="sd"> * Fields for the instance are stored in an array. Each field consists of</span>
+<span class="sd"> * an array with three required keys: name, type, label</span>
+<span class="sd"> * and one optional key: meta</span>
+<span class="sd"> *</span>
+<span class="sd"> * name    - (string) The field name used. No special characters.</span>
+<span class="sd"> * type    - (string) The registered field type.</span>
+<span class="sd"> *                  Fields available: text, textarea, wysiwyg, select</span>
+<span class="sd"> * label   - (string) The label displayed for the field.</span>
+<span class="sd"> * default - (string) The default WordPress metadata to use when initially adding the Attachment</span>
+<span class="sd"> *                  Defaults available: title, caption, alt, description</span>
+<span class="sd"> * meta    - (array) The field-specific parameters that apply only to that field type</span>
+<span class="sd"> */</span>
+
+<span class="nv">$fields</span>         <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+  <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'name'</span>      <span class="o">=&gt;</span> <span class="s1">'title'</span><span class="p">,</span>                             <span class="c1">// unique field name</span>
+    <span class="s1">'type'</span>      <span class="o">=&gt;</span> <span class="s1">'text'</span><span class="p">,</span>                              <span class="c1">// registered field type</span>
+    <span class="s1">'label'</span>     <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Title'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>        <span class="c1">// label to display</span>
+    <span class="s1">'default'</span>   <span class="o">=&gt;</span> <span class="s1">'title'</span><span class="p">,</span>                             <span class="c1">// default value upon selection</span>
+  <span class="p">),</span>
+  <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'name'</span>      <span class="o">=&gt;</span> <span class="s1">'caption'</span><span class="p">,</span>                           <span class="c1">// unique field name</span>
+    <span class="s1">'type'</span>      <span class="o">=&gt;</span> <span class="s1">'textarea'</span><span class="p">,</span>                          <span class="c1">// registered field type</span>
+    <span class="s1">'label'</span>     <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Caption'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>      <span class="c1">// label to display</span>
+    <span class="s1">'default'</span>   <span class="o">=&gt;</span> <span class="s1">'caption'</span><span class="p">,</span>                           <span class="c1">// default value upon selection</span>
+  <span class="p">),</span>
+  <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'name'</span>      <span class="o">=&gt;</span> <span class="s1">'option'</span><span class="p">,</span>                            <span class="c1">// unique field name</span>
+    <span class="s1">'type'</span>      <span class="o">=&gt;</span> <span class="s1">'select'</span><span class="p">,</span>                            <span class="c1">// registered field type</span>
+    <span class="s1">'label'</span>     <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Option'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>       <span class="c1">// label to display</span>
+    <span class="s1">'meta'</span>      <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>                               <span class="c1">// field-specific meta as defined by field class</span>
+                    <span class="s1">'allow_null'</span>    <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>            <span class="c1">// allow null value? (adds 'empty' &lt;option&gt;)</span>
+                    <span class="s1">'multiple'</span>      <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>            <span class="c1">// multiple &lt;select&gt;?</span>
+                    <span class="s1">'options'</span>       <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>           <span class="c1">// the &lt;option&gt;s to use</span>
+                          <span class="s1">'1'</span>     <span class="o">=&gt;</span> <span class="s1">'Option 1'</span><span class="p">,</span>
+                          <span class="s1">'2'</span>     <span class="o">=&gt;</span> <span class="s1">'Option 2'</span><span class="p">,</span>
+                      <span class="p">)</span>
+                  <span class="p">),</span>
+  <span class="p">),</span>
+  <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'name'</span>      <span class="o">=&gt;</span> <span class="s1">'description'</span><span class="p">,</span>                       <span class="c1">// unique field name</span>
+    <span class="s1">'type'</span>      <span class="o">=&gt;</span> <span class="s1">'wysiwyg'</span><span class="p">,</span>                           <span class="c1">// registered field type</span>
+    <span class="s1">'label'</span>     <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">'Description'</span><span class="p">,</span> <span class="s1">'attachments'</span> <span class="p">),</span>  <span class="c1">// label to display</span>
+    <span class="s1">'default'</span>   <span class="o">=&gt;</span> <span class="s1">'description'</span><span class="p">,</span>                       <span class="c1">// default value upon selection</span>
+  <span class="p">),</span>
+<span class="p">);</span>
+</pre></div>
+
+<h3>Pulling Attachments to your Theme</h3>
+
+<p>Once your instances are set up and working, you'll also need to edit your theme's template files to pull the data to the front end. To retrieve the Attachments for the current post, add this within The Loop:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$attachments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Attachments</span><span class="p">(</span> <span class="s1">'attachments'</span> <span class="p">);</span> <span class="cm">/* pass the instance name */</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">exist</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;h3&gt;Attachments&lt;/h3&gt;</span>
+<span class="x">  &lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">while</span><span class="p">(</span> <span class="nv">$attachment</span> <span class="o">=</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;li&gt;</span>
+<span class="x">        &lt;pre&gt;</span><span class="cp">&lt;?php</span> <span class="nb">print_r</span><span class="p">(</span> <span class="nv">$attachment</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;/pre&gt;</span>
+<span class="x">      &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endwhile</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;/ul&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+<h4>Retrieve Attachments Outside The Loop</h4>
+
+<p>If you want to get the Attachments for a post <strong>outside The Loop</strong>, add a second parameter with the post ID when instantiating Attachments:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+  <span class="c1">// retrieve all Attachments for the 'attachments' instance of post 123</span>
+  <span class="nv">$attachments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Attachments</span><span class="p">(</span> <span class="s1">'attachments'</span><span class="p">,</span> <span class="mi">123</span> <span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">exist</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;h3&gt;Attachments&lt;/h3&gt;</span>
+<span class="x">  &lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">while</span><span class="p">(</span> <span class="nv">$attachment</span> <span class="o">=</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;li&gt;</span>
+<span class="x">        &lt;pre&gt;</span><span class="cp">&lt;?php</span> <span class="nb">print_r</span><span class="p">(</span> <span class="nv">$attachment</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;/pre&gt;</span>
+<span class="x">      &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endwhile</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;/ul&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+<h4>Retrieve Attachment Attributes</h4>
+
+<p>You can also retrieve various attributes of the current Attachment directly using these utility functions:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$attachments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Attachments</span><span class="p">(</span> <span class="s1">'attachments'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">exist</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;h3&gt;Attachments&lt;/h3&gt;</span>
+<span class="x">  &lt;p&gt;Total Attachments: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">total</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;/p&gt;</span>
+<span class="x">  &lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">while</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;li&gt;</span>
+<span class="x">        ID: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Type: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">type</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Subtype: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">subtype</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        URL: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">url</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Image: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">image</span><span class="p">(</span> <span class="s1">'thumbnail'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Source: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">src</span><span class="p">(</span> <span class="s1">'full'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Size: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">filesize</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Title Field: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'title'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Caption Field: Name: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'caption'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">endwhile</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  &lt;/ul&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+<h4>Retrieve Single Attachments</h4>
+
+<p>If you don't want to use the above implementation to loop through your Attachments, can also retrieve them explicitly:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$attachments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Attachments</span><span class="p">(</span> <span class="s1">'attachments'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">exist</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  </span><span class="cp">&lt;?php</span> <span class="nv">$my_index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">  </span><span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span> <span class="nv">$attachment</span> <span class="o">=</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">get_single</span><span class="p">(</span> <span class="nv">$my_index</span> <span class="p">)</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    &lt;h3&gt;Attachment at index 0:&lt;/h3&gt;</span>
+<span class="x">    &lt;pre&gt;</span><span class="cp">&lt;?php</span> <span class="nb">print_r</span><span class="p">(</span> <span class="nv">$attachment</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;/pre&gt;</span>
+<span class="x">    &lt;ul&gt;</span>
+<span class="x">      &lt;li&gt;</span>
+<span class="x">        ID: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">(</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Type: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">type</span><span class="p">(</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Subtype: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">subtype</span><span class="p">(</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        URL: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">url</span><span class="p">(</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Image: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">image</span><span class="p">(</span> <span class="s1">'thumbnail'</span><span class="p">,</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Source: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">src</span><span class="p">(</span> <span class="s1">'full'</span><span class="p">,</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Size: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">filesize</span><span class="p">(</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Title Field: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'title'</span><span class="p">,</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">        Caption Field: Name: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'caption'</span><span class="p">,</span> <span class="nv">$my_index</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;/li&gt;</span>
+<span class="x">    &lt;/ul&gt;</span>
+<span class="x">  </span><span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+<h3>Search</h3>
+
+<p>Attachments provides a method of searching it's own data using a number of attributes. This faciliates a search to be as widespread or as specific as you'd like.</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+  <span class="nv">$attachments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Attachments</span><span class="p">();</span>
+
+  <span class="nv">$search_args</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+      <span class="s1">'instance'</span>      <span class="o">=&gt;</span> <span class="s1">'attachments'</span><span class="p">,</span>       <span class="c1">// search all instances</span>
+      <span class="s1">'fields'</span>        <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="s1">'caption'</span> <span class="p">),</span>  <span class="c1">// search the 'caption' field only</span>
+    <span class="p">);</span>
+
+  <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">search</span><span class="p">(</span> <span class="s1">'lorem ipsum'</span><span class="p">,</span> <span class="nv">$search_args</span> <span class="p">);</span> <span class="c1">// search for 'lorem ipsum'</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">exist</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    &lt;h3&gt;Attachments&lt;/h3&gt;</span>
+<span class="x">    &lt;ul&gt;</span>
+<span class="x">      </span><span class="cp">&lt;?php</span> <span class="k">while</span><span class="p">(</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">        &lt;li&gt;</span>
+<span class="x">          Attachment ID: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">          Post ID: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">post_id</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">          Title Field: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'title'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x">&lt;br /&gt;</span>
+<span class="x">          Caption Field: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$attachments</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span> <span class="s1">'caption'</span> <span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">        &lt;/li&gt;</span>
+<span class="x">      </span><span class="cp">&lt;?php</span> <span class="k">endwhile</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    &lt;/ul&gt;</span>
+<span class="x">  </span><span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+<p>The full list of available search arguments (and their defaults) is as follows:</p>
+
+<div class="highlight"><pre><span class="nv">$defaults</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+      <span class="s1">'attachment_id'</span> <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span>            <span class="c1">// (int) not searching for a single attachment ID</span>
+      <span class="s1">'instance'</span>      <span class="o">=&gt;</span> <span class="s1">'attachments'</span><span class="p">,</span>   <span class="c1">// (string) the instance you want to search</span>
+      <span class="s1">'post_type'</span>     <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span>            <span class="c1">// (string) search 'any' post type</span>
+      <span class="s1">'post_id'</span>       <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span>            <span class="c1">// (int) searching all posts</span>
+      <span class="s1">'post_status'</span>   <span class="o">=&gt;</span> <span class="s1">'publish'</span><span class="p">,</span>       <span class="c1">// (string) search only published posts</span>
+      <span class="s1">'fields'</span>        <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span>            <span class="c1">// (string|array) search all fields</span>
+  <span class="p">);</span>
+</pre></div>
+
+<p>Once you've performed your search, you can loop through the returned Attachments as you normally would.</p>
+
+<h2>Screenshots</h2>
+
+<h5>An Attachments meta box sitting below the content editor</h5>
+
+<p><img src="http://mondaybynoon.com/images/attachments/screenshot-1.png" alt="An Attachments meta box sitting below the content editor"></p>
+
+<h5>Direct integration with WordPress 3.5+ Media</h5>
+
+<p><img src="http://mondaybynoon.com/images/attachments/screenshot-2.png" alt="Direct integration with WordPress 3.5+ Media"></p>
+
+<h5>Attach multiple files at once</h5>
+
+<p><img src="http://mondaybynoon.com/images/attachments/screenshot-3.png" alt="Attach multiple files at once"></p>
+
+<h5>Custom fields for each Attachment</h5>
+
+<p><img src="http://mondaybynoon.com/images/attachments/screenshot-4.png" alt="Custom fields for each Attachment"></p>
+
+<h5>Drag and drop to sort</h5>
+
+<p><img src="http://mondaybynoon.com/images/attachments/screenshot-5.png" alt="Drag and drop to sort"></p>
+
+<h2>Frequently Asked Questions</h2>
+
+<h4>Attachments isn't showing up on my edit screens</h4>
+
+<p>You will need to tell Attachments which instances you'd like to use. Please reference the <strong><a href="#usage">Usage</a></strong> instructions.</p>
+
+<h4>Attachments are not showing up in my theme</h4>
+
+<p>You will need to edit your theme files where applicable. Please reference the <strong><a href="#usage">Usage</a></strong> instructions.</p>
+
+<h4>How do I disable the default Attachments meta box?</h4>
+
+<p>You will need to edit your Attachments configuration. Please reference the <strong><a href="#usage">Usage</a></strong> instructions.</p>
+
+<h4>How do I change the fields for each Attachment?</h4>
+
+<p>You will need to edit your Attachments configuration. Please reference the <strong><a href="#usage">Usage</a></strong> instructions.</p>
+
+<h4>Where are uploads saved?</h4>
+
+<p>Attachments uses WordPress' built in Media library for uploads and storage.</p>
+
+<h4>I lost my Attachments after upgrading!</h4>
+
+<p><strong><em>DO NOT update any Post/Page/CPT with Attachments</em></strong>, the data has not been lost. Please reference the <strong><a href="#upgrade-notice">Upgrade notice</a></strong>.</p>
+
+<h2>Changelog</h2>
+
+<dl>
+<dt>3.3.1</dt>
+    <dd>Added meta box positioning arguments when registering instances</dd>
+    <dd>Cleaned up some CSS when Attachments instances are in the sidebar</dd>
+
+    <dt>3.3</dt>
+    <dd>Added a <code>search()</code> method to allow searching for Attachments based on their attributes (e.g. attachment ID, post ID, post type, field values, etc.)</dd>
+    <dd>Improved the 'Remove' animation</dd>
+    <dd>New field: select</dd>
+    <dd>New parameter for Attachments attributes methods. You can pass the index (<code>int</code>) of the Attachment you'd like to utilize when firing the method.</dd>
+
+    <dt>3.2</dt>
+    <dd>Added option to disable the Settings screen</dd>
+    <dd>Added the ability to set a default for fields using the metadata that exists in WordPress. Available defaults include: title, caption, alt, and description. If set, the metadata for the correlating field will be used as the field default when initially adding an Attachment from the Media modal. Only applies to text, textarea, and wysiwyg fields.</dd>
+    <dd>Added a <code>get_single()</code> method that allows you to specifically retrieve a single Attachment</dd>
+    <dd>Clarified some documentation</dd>
+
+    <dt>3.1.4</dt>
+    <dd>Changed 'Delete' to 'Remove' so as to not make it sound like the file itself would be deleted from Media (props Lane Goldberg)</dd>
+    <dd>Better handling of posts that have no Attachments when saving</dd>
+
+    <dt>3.1.3</dt>
+    <dd>Fixed a potential issue with the WYSIWYG field not working on CPT without editor support</dd>
+    <dd>Field assets are less aggressive and only fire when necessary</dd>
+    <dd>Reorganized the migration process a bit in prep for Attachments Pro support</dd>
+
+    <dt>3.1.2</dt>
+    <dd>Fixed a regression that prevented successful migration of legacy Attachments data</dd>
+
+    <dt>3.1.1</dt>
+    <dd>Fixed a Fatal Error when registering the text field</dd>
+
+    <dt>3.1</dt>
+    <dd>New field: wysiwyg</dd>
+    <dd>Fields will now properly respect line breaks</dd>
+    <dd>Fields will now properly return HTML instead of escaped HTML</dd>
+
+    <dt>3.0.9</dt>
+    <dd>Fixed an issue where special characters would break title/caption fields during migration</dd>
+
+    <dt>3.0.8.2</dt>
+    <dd>Fixed a CSS issue with only one text field</dd>
+
+    <dt>3.0.8.1</dt>
+    <dd>Better storage of special characters for PHP 5.4+</dd>
+
+    <dt>3.0.8</dt>
+    <dd>Fixed an issue in Firefox where you weren't able to focus inputs unless you clicked their label</dd>
+    <dd>New field: textarea</dd>
+
+    <dt>3.0.7</dt>
+    <dd>Proper sanitization of Custom Post Type names (as WordPress does it)</dd>
+
+    <dt>3.0.6</dt>
+    <dd>Fixed a possible JavaScript error if an Attachment that's an image doesn't have a proper thumbnail URL</dd>
+    <dd>Added a <code>total()</code> method that will return the number of Attachments for the current instance</dd>
+    <dd>When requesting the image() for a non-image Attachment, the WordPress-defined icon will be returned</dd>
+    <dd>Added an <code>icon()</code> method that will return the WordPress-defined icon for the Attachment</dd>
+    <dd>Cleaned up a PHP Warning when trying to save for an undefined field type</dd>
+    <dd>Fixed an issue where template tags would be output for non-image Attachments after saving</dd>
+
+    <dt>3.0.5</dt>
+    <dd>Fixed a regression in handling Custom Post Type names that would too aggressively interfere with instance regustration</dd>
+    <dd>Fixed an issue when working with non-image Attachments</dd>
+
+    <dt>3.0.4</dt>
+    <dd>Fixed an issue that prevented the choosing of a Featured Image for a Custom Post Type if Attachments was activated</dd>
+    <dd>Attachments now only enqueues its assets on edit screens that actually utilize Attachments</dd>
+    <dd>Fixed a potential JavaScript error triggered when a 'thumbnail' image size was not available</dd>
+    <dd>Prevented incorrect usage of dashes used in CPT names for post_type argument when registering Attachments instances (fixes an integration issue with WP e-Commerce)</dd>
+    <dd>Prevented re-running of migration process to avoid duplicates (e.g. on browser reload)</dd>
+
+    <dt>3.0.3</dt>
+    <dd>Fixed an issue that prevented defining a post ID when retrieving Attachments outside The Loop</dd>
+    <dd>Cleaned up potential PHP warning when Attachments were requested for a post that had none</dd>
+
+    <dt>3.0.2</dt>
+    <dd>Fixed an issue where some HTML entities were not properly stored</dd>
+
+    <dt>3.0.1</dt>
+    <dd>Fixed an issue where legacy mode was always enabled</dd>
+
+    <dt>3.0</dt>
+    <dd> <strong>Major</strong> rewrite. After three years of development, Attachments has been rewritten to make
+          even better use of what WordPress has to offer</dd>
+    <dd> Utilizes the brand spanking new 3.5 Media workflow</dd>
+    <dd> Configuration now takes place within your theme or a plugin</dd>
+    <dd> Multiple meta boxes! You can segment groups of Attachments with new instances, each unique</dd>
+    <dd> Dynamic fields! You can manipulate which fields each instance uses</dd>
+    <dd> File type limits. Limit which files are available to Attachments (e.g. images, audio, video)</dd>
+
+</dl><h2>Roadmap</h2>
+
+<p>Planned feature additions include:</p>
+
+<ul>
+<li>Additional field type: checkbox</li>
+<li>Additional field type: radio</li>
+<li>User-defined limiting the number of Attachments per instance</li>
+<li>User-defined custom field types</li>
+<li>Additional hooks/actions from top to bottom</li>
+<li>Shortcode(s)</li>
+<li>Output templates</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jchristopher">jchristopher</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
